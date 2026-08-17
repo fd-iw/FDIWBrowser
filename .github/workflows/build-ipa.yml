@@ -5,6 +5,10 @@ on:
     branches: [ main, master ]
   workflow_dispatch:
 
+defaults:
+  run:
+    working-directory: FDIWBrowser
+
 jobs:
   build:
     runs-on: macos-14
@@ -45,5 +49,5 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: FDIWBrowser-unsigned-ipa
-          path: build/FDIWBrowser-unsigned.ipa
+          path: FDIWBrowser/build/FDIWBrowser-unsigned.ipa
           if-no-files-found: error
