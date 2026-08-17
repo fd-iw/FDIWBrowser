@@ -5,7 +5,6 @@ options:
   deploymentTarget:
     iOS: "15.0"
   createIntermediateGroups: true
-  minimumXcodeGenVersion: "2.35.0"
 
 targets:
   FDIWBrowser:
@@ -34,12 +33,6 @@ targets:
           - UIInterfaceOrientationPortrait
           - UIInterfaceOrientationLandscapeLeft
           - UIInterfaceOrientationLandscapeRight
-        UISupportedInterfaceOrientations~ipad:
-          - UIInterfaceOrientationPortrait
-          - UIInterfaceOrientationPortraitUpsideDown
-          - UIInterfaceOrientationLandscapeLeft
-          - UIInterfaceOrientationLandscapeRight
-        # Allows plain http:// pages to load. Drop this if you only browse https.
         NSAppTransportSecurity:
           NSAllowsArbitraryLoads: true
 
@@ -53,5 +46,3 @@ targets:
         GENERATE_INFOPLIST_FILE: NO
         IPHONEOS_DEPLOYMENT_TARGET: "15.0"
         ENABLE_BITCODE: NO
-        SUPPORTS_MACCATALYST: NO
-        CODE_SIGN_STYLE: Automatic
