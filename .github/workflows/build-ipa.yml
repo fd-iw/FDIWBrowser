@@ -1,0 +1,49 @@
+name: Build unsigned IPA
+
+on:
+  push:
+    branches: [ main, master ]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: macos-14
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install XcodeGen
+        run: brew install xcodegen
+
+      - name: Generate Xcode project
+        run: xcodegen generate
+
+      - name: Archive (no code signing)
+        run: |
+          xcodebuild \
+            -project FDIWBrowser.xcodeproj \
+            -scheme FDIWBrowser \
+            -configuration Release \
+            -sdk iphoneos \
+            -destination 'generic/platform=iOS' \
+            -archivePath build/FDIWBrowser.xcarchive \
+            archive \
+            CODE_SIGN_IDENTITY="" \
+            CODE_SIGNING_REQUIRED=NO \
+            CODE_SIGNING_ALLOWED=NO \
+            ENABLE_BITCODE=NO
+
+      - name: Package into .ipa
+        run: |
+          mkdir -p build/Payload
+          cp -R build/FDIWBrowser.xcarchive/Products/Applications/FDIWBrowser.app build/Payload/
+          cd build
+          zip -qry FDIWBrowser-unsigned.ipa Payload
+          ls -lh FDIWBrowser-unsigned.ipa
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: FDIWBrowser-unsigned-ipa
+          path: build/FDIWBrowser-unsigned.ipa
+          if-no-files-found: error
